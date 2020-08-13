@@ -16,16 +16,12 @@ jobs:
         run: npm install
       - name: Run linter
         run: npm run lint
-      - name: Run unit test
-        run: npm run test
       - name: Build app
         run: npm run build
-      - name: Export app
-        run: npm run export
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.4
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.RUBZ_SERVER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
           ARGS: "-rltgoDzqO --delete"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
