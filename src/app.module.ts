@@ -6,9 +6,11 @@ import { ClipsService } from './clips/clips.service';
 import { YtdlService } from './ytdl/ytdl.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'assets'),
       exclude: ['/api*'],
