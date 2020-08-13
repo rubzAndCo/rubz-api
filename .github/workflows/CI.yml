@@ -1,0 +1,34 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: install node_module
+        run: npm install
+      - name: Run linter
+        run: npm run lint
+      - name: Run unit test
+        run: npm run test
+      - name: Build app
+        run: npm run build
+      - name: Export app
+        run: npm run export
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@v2.1.4
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.RUBZ_SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzqO --delete"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
+          TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
+          CI: true
