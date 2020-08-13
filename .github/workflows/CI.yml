@@ -16,6 +16,8 @@ jobs:
         run: npm install
       - name: Run linter
         run: npm run lint
+      - name: Prebuilt app
+        run: npm run prebuild
       - name: Build app
         run: npm run build
       - name: Deploy to Server
