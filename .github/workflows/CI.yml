@@ -21,10 +21,10 @@ jobs:
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.4
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          ARGS: "-rltgoDzqO --delete"
-          SOURCE: "dist/"
-          REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
-          REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
-          TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
-          CI: true
+         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+         ARGS: "-rltgoDzqO --delete"
+         SOURCE: "dist/"
+         REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
+         REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
+         TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
+         CI: true
