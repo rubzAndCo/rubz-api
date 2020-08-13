@@ -38,5 +38,6 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            whoami
-            ls -al
+            npm install
+            npm run build
+            npm run start
