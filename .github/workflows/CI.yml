@@ -30,3 +30,13 @@ jobs:
          REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
          TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
          CI: true
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.RUBZ_REMOTE_HOST }}
+          username: ${{ secrets.RUBZ_REMOTE_USER }}
+          password: ${{ secrets.PASSWORD }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            whoami
+            ls -al
