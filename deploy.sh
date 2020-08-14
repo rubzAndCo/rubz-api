@@ -9,6 +9,4 @@ cd /var/www/api || exit
 
 nvm use --lts
 
-/usr/bin/env npm install
-/usr/bin/env npm run build
 /usr/bin/env npm run start:prod
