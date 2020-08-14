@@ -53,7 +53,4 @@ jobs:
           host: ${{ secrets.RUBZ_REMOTE_HOST }}
           username: ${{ secrets.RUBZ_REMOTE_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
-            npm install
-            npm run build
-            npm run start
+          script: ${{ secrets.RUBZ_REMOTE_TARGET }}/deploy.sh
