@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
 
@@ -16,6 +16,18 @@ jobs:
         run: npm install
       - name: Run linter
         run: npm run lint
+  build-and-deploy:
+
+    needs: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: install node_module
+        run: npm install
       - name: Prebuilt app
         run: npm run prebuild
       - name: Build app
@@ -23,19 +35,23 @@ jobs:
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v2.1.4
         env:
-         SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
-         ARGS: "-rltgoDzqO --delete"
-         SOURCE: ""
-         REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
-         REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
-         TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
-         CI: true
-      - name: executing remote ssh commands using password
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzqO --delete"
+          SOURCE: ""
+          REMOTE_HOST: ${{ secrets.RUBZ_REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.RUBZ_REMOTE_USER }}
+          TARGET: ${{ secrets.RUBZ_REMOTE_TARGET }}
+          CI: true
+  launch:
+
+    needs: [tests, build-and-deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.RUBZ_REMOTE_HOST }}
           username: ${{ secrets.RUBZ_REMOTE_USER }}
-          password: ${{ secrets.PASSWORD }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             npm install
