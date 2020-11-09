@@ -22,7 +22,3 @@ async function bootstrap() {
 }
 
 bootstrap()
-  .then((result) => {
-    console.log('result', result)
-  })
-  .catch((err) => console.log(err))
