@@ -11,4 +11,7 @@ export class WorkingTimeEntity {
 
   @Column('int')
   timeWorked: number
+
+  @Column('boolean')
+  isPayed: boolean
 }

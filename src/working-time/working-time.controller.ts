@@ -16,7 +16,7 @@ export class WorkingTimeController {
     try {
       const workingTime = await this.workingTime.create(data)
 
-      return this.workingTimeDto.render(workingTime)
+      return this.workingTimeDto.render(HttpStatus.CREATED, workingTime)
     } catch(err) {
       if (err instanceof WorkingTimeValidateError)
         throw new HttpException(err.message, HttpStatus.FORBIDDEN);
@@ -34,7 +34,7 @@ export class WorkingTimeController {
         message: 'not found'
       }
 
-      return this.workingTimeDto.render(workingTime)
+      return this.workingTimeDto.render(HttpStatus.CREATED, workingTime)
     } catch (err) {
       if (err instanceof WorkingTimeValidateError)
         throw new HttpException(err.message, HttpStatus.FORBIDDEN);

@@ -17,7 +17,7 @@ export class WorkingTimeValidate implements WorkingTimeValidate {
     const errors = []
 
     try {
-      const date = this.dateProvider.stringToDate(data.date)
+      const date: dayjs.Dayjs | null = this.dateProvider.stringToDate(data.date)
 
       if (!data.hours) errors.push('No hours provided')
       if (!date || !this.dateProvider.isValid(date)) errors.push('No date provided')

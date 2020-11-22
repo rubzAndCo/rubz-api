@@ -10,6 +10,7 @@ import { WorkingTimeDto } from './services/working-time.dto';
 import { WorkingTimeValidate } from './services/working-time-validate';
 import { WorkingTime } from './working-time';
 import { DateProvider } from '../lib/date.provider';
+import { WorkingTimePayload } from './types/working-time-payload';
 
 describe('working-time', () => {
   let app: INestApplication;
@@ -42,34 +43,37 @@ describe('working-time', () => {
     await app.init();
   });
 
-  it(`/POST working-time`, () => {
-    const fixture = {
-      date: '2020-10-17T16:10:20.290Z',
-      hours: 2
-    }
-    return request(app.getHttpServer())
-      .post('/working-time')
-      .send(fixture)
-      .expect(201)
-      .expect({
-        status: 201,
-        data: {
-          id: 1,
-          workDate: fixture.date,
-          timeWorked: fixture.hours
-        },
-      });
-  });
+  describe('/POST working-time', () => {
+    it(`Should create a working-time`, () => {
+      const fixture: WorkingTimePayload = {
+        date: '2020-10-17T16:10:20.290Z',
+        hours: 2
+      }
+      return request(app.getHttpServer())
+        .post('/working-time')
+        .send(fixture)
+        .expect(201)
+        .expect({
+          status: 201,
+          data: {
+            id: 1,
+            workDate: fixture.date,
+            timeWorked: fixture.hours,
+            isPayed: false
+          },
+        });
+    });
 
-  it(`/POST Should return a 403 if no payload`, () => {
-    return request(app.getHttpServer())
-      .post('/working-time')
-      .expect(403)
-      .expect({
-        statusCode: 403,
-        message: "No hours provided,No date provided"
-      });
-  });
+    it(`Should return a 403 if no payload`, () => {
+      return request(app.getHttpServer())
+        .post('/working-time')
+        .expect(403)
+        .expect({
+          statusCode: 403,
+          message: "No hours provided,No date provided"
+        });
+    });
+  })
 
   afterAll(async () => {
     await app.close();
