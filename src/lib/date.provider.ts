@@ -17,7 +17,8 @@ export class DateProvider {
     this.dayjs.tz.setDefault('Europe/Paris')
   }
 
-  stringToDate(stringDate: string): dayjs.Dayjs {
+  stringToDate(stringDate?: string): dayjs.Dayjs | null {
+    if (!stringDate) return null
     return this.dayjs(stringDate).tz('Europe/paris')
   }
 

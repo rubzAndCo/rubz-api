@@ -1,27 +1,41 @@
 import { WorkingTimeEntity } from '../entity/working-time.entity';
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 
 export interface WorkingTimeDto {
-  render(workingTimeEntity: WorkingTimeEntity | WorkingTimeEntity[]): {
+  render(status: HttpStatus, workingTimeEntity: WorkingTimeEntity | WorkingTimeEntity[]): {
     status: number,
-    data: WorkingTimeEntity | WorkingTimeEntity[]
+    data: FormattedWorkingTime | FormattedWorkingTime[]
   }
 }
 
 @Injectable()
 export class WorkingTimeDto implements WorkingTimeDto {
-  render(data: WorkingTimeEntity): { status: number; data: WorkingTimeEntity | WorkingTimeEntity[] } {
+  render(status, data: WorkingTimeEntity): { status: number; data: FormattedWorkingTime | FormattedWorkingTime[] } {
     return {
-      status: 201,
+      status,
       data: this._handleEntities(data)
     };
   }
 
-  private _handleEntities(data: WorkingTimeEntity | WorkingTimeEntity[]): WorkingTimeEntity | WorkingTimeEntity[] {
-    return Array.isArray(data) ? data.map((workingTimeEntity) => ({
-      id: workingTimeEntity.id,
-      workDate: workingTimeEntity.workDate,
-      timeWorked: workingTimeEntity.timeWorked,
-    })) : data
+  private _handleEntities(data: WorkingTimeEntity | WorkingTimeEntity[]): FormattedWorkingTime | FormattedWorkingTime[] {
+    return Array.isArray(data)
+      ? data.map((workingTimeEntity) => this.workingTimeMapper(workingTimeEntity))
+      : this.workingTimeMapper(data)
   }
+
+  private workingTimeMapper(workingTimeEntity: WorkingTimeEntity): FormattedWorkingTime {
+    return {
+      id: workingTimeEntity.id,
+      workDate: workingTimeEntity.workDate.toString(),
+      timeWorked: workingTimeEntity.timeWorked,
+      isPayed: workingTimeEntity.isPayed ?? false
+    }
+  }
+}
+
+export type FormattedWorkingTime = {
+  id: number,
+  workDate: string
+  timeWorked: number,
+  isPayed: boolean
 }
